@@ -1,63 +1,77 @@
 const form = document.getElementById('expense-form');
-const nameinput = document.getElementById('expense-name');
-const amountinput = document.getElementById('expense-amount');
-const expenselist = document.getElementById('expense-list');
-const totaldisplay = document.getElementById('total');
+const nameInput = document.getElementById('expense-name');
+const amountInput = document.getElementById('expense-amount');
+const expenseList = document.getElementById('expense-list');
+const totalDisplay = document.getElementById('total');
+const searchInput = document.getElementById('search');
 
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-function renderExpenses() {
-    expenselist.innerHTML = '';
+function renderExpenses(list = expenses) {
+    expenseList.innerHTML = '';
     let total = 0;
 
-    expenses.forEach(({ name, amount }, index) => {
+    list.forEach(({ name, amount }) => {
         const li = document.createElement('li');
         li.textContent = `${name} - $${amount.toFixed(2)}`;
 
-        const deletebtn = document.createElement("button");
-        deletebtn.textContent = 'Del';
-        deletebtn.style.marginLeft = '10px';
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = 'Del';
+        deleteBtn.style.marginLeft = '10px';
 
-        deletebtn.addEventListener('click', () => {
-            expenses.splice(index, 1);
-            localStorage.setItem('expenses', JSON.stringify(expenses));
-            renderExpenses();
-        });
-
-        const editbtn = document.createElement("button");
-        editbtn.textContent = 'Edit';
-        editbtn.style.marginLeft = '10px';
-
-        editbtn.addEventListener('click', () => {
-            const newname = prompt("Enter a new name:", name);
-            const newamount = parseFloat(prompt("Enter new amount:", amount));
-
-            if (newname && !isNaN(newamount)) {
-                expenses[index] = { name: newname.trim(), amount: newamount };
+        deleteBtn.addEventListener('click', () => {
+            const indexToDelete = expenses.findIndex(
+                exp => exp.name === name && exp.amount === amount
+            );
+            if (indexToDelete > -1) {
+                expenses.splice(indexToDelete, 1);
                 localStorage.setItem('expenses', JSON.stringify(expenses));
                 renderExpenses();
+            }
+        });
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = 'Edit';
+        editBtn.style.marginLeft = '10px';
+
+        editBtn.addEventListener('click', () => {
+            const newName = prompt("Enter a new name:", name);
+            const newAmount = parseFloat(prompt("Enter new amount:", amount));
+
+            if (newName && !isNaN(newAmount)) {
+                const indexToEdit = expenses.findIndex(
+                    exp => exp.name === name && exp.amount === amount
+                );
+                if (indexToEdit > -1) {
+                    expenses[indexToEdit] = {
+                        name: newName.trim(),
+                        amount: newAmount
+                    };
+                    localStorage.setItem('expenses', JSON.stringify(expenses));
+                    renderExpenses();
+                }
             } else {
                 alert("Please enter valid name and amount");
             }
         });
 
-        li.appendChild(deletebtn);
-        li.appendChild(editbtn);
-
-        expenselist.appendChild(li);
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn);
+        expenseList.appendChild(li);
         total += amount;
     });
 
-    totaldisplay.textContent = total.toFixed(2);
+    totalDisplay.textContent = total.toFixed(2);
 }
 
-// INITIAL RENDER
+
 renderExpenses();
+
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();
-    const name = nameinput.value.trim();
-    const amount = parseFloat(amountinput.value);
+    const name = nameInput.value.trim();
+    const amount = parseFloat(amountInput.value);
 
     if (name === '' || isNaN(amount)) {
         alert('Please input valid name and amount');
@@ -68,6 +82,15 @@ form.addEventListener('submit', function (e) {
     localStorage.setItem('expenses', JSON.stringify(expenses));
     renderExpenses();
 
-    nameinput.value = '';
-    amountinput.value = '';
+    nameInput.value = '';
+    amountInput.value = '';
+});
+
+
+searchInput.addEventListener('input', function () {
+    const query = searchInput.value.toLowerCase();
+    const filtered = expenses.filter(exp =>
+        exp.name.toLowerCase().includes(query)
+    );
+    renderExpenses(filtered);
 });

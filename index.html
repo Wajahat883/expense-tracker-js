@@ -10,12 +10,18 @@
    <div class="container">
     <h1>Expense-tracker</h1>
     <form id="expense-form">
-        <input type="text" id="expense-name" placeholder="Expense name" required>
-        <input type="text" id="expense-amount" placeholder="Amount" required>
+        <input id="expense-name" type="text" placeholder="Expense Name" />
+        <input id="expense-amount" type="number" placeholder="Amount" />
         <button type="submit">Add</button>
-    </form>
-    <ul id="expense-list"></ul>
-    <h3>Total:$<span id="total">0</span></h3>
+      </form>
+      
+      <input id="search" type="text" placeholder="Search Expense" />
+      
+      <ul id="expense-list"></ul>
+      <h2>Total: $<span id="total">0.00</span></h2>
+      
+      <script src="app.js"></script>
+      
    </div>
     <script src="index.js"></script>
 </body>
