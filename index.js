@@ -13,6 +13,8 @@ function renderExpenses(list = expenses) {
 
     list.forEach(({ name, amount }) => {
         const li = document.createElement('li');
+        // li.style.background=''
+        li.style.color='black'
         li.textContent = `${name} - $${amount.toFixed(2)}`;
 
         const deleteBtn = document.createElement("button");
@@ -74,8 +76,15 @@ sortselect.addEventListener('change',()=>{
     }
     renderExpenses(sortedexpenses)
 })
-
-
+const togglethemebtn = document.getElementById('toggle-theme')
+if(localStorage.getItem('theme')==='dark'){
+    document.body.classList.add('dark')
+}
+togglethemebtn.addEventListener('click',() =>{
+    document.body.classList.toggle('dark')
+    const theme = document.body.classList.contains('dark')?'dark':'light';
+    localStorage.setItem('theme',theme);
+})
 renderExpenses();
 
 

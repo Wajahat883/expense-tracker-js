@@ -8,21 +8,27 @@
 </head>
 <body>
    <div class="container">
-    <h1>Expense-tracker</h1>
+    <div class="header">
+        <h1>Expense-tracker</h1>
+        <button id="toggle-theme" title="Toggle Theme">🌙</button>
+    </div>
+  
     <form id="expense-form">
         <input id="expense-name" type="text" placeholder="Expense Name" />
         <input id="expense-amount" type="number" placeholder="Amount" />
         <button type="submit">Add</button>
       </form>
-      
-      <input id="search" type="text" placeholder="Search Expense" />
+      <div>
+        <input id="search" type="text" placeholder="Search Expense" />
+        <select id="sort">
+            <option value="">Sort By</option>
+            <option value="high">Amount:High to Low</option>
+            <option value="low">Amount:Low to High</option>
+          </select>
+      </div>
       
       <ul id="expense-list"></ul>
-      <select id="sort">
-        <option value="">Sort By</option>
-        <option value="high">Amount:High to Low</option>
-        <option value="low">Amount:Low to High</option>
-      </select>
+      
       <h2>Total: $<span id="total">0.00</span></h2>
       
     
