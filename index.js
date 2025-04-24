@@ -63,6 +63,17 @@ function renderExpenses(list = expenses) {
 
     totalDisplay.textContent = total.toFixed(2);
 }
+const sortselect=document.getElementById('sort')
+
+sortselect.addEventListener('change',()=>{
+    let sortedexpenses=[...expenses];
+    if(sortselect.value=='high'){
+        sortedexpenses.sort((a,b)=>b.amount-a.amount)
+    }else if(sortselect.value==='low'){
+        sortedexpenses.sort((a,b)=>a.amount-b.amount)
+    }
+    renderExpenses(sortedexpenses)
+})
 
 
 renderExpenses();
